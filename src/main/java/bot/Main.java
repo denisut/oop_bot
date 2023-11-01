@@ -1,29 +1,19 @@
 package bot;
 
-import java.util.Scanner;
+import bot.handlers.MainHandler;
+import org.telegram.telegrambots.meta.TelegramBotsApi;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 
 public class Main {
 
-    public static void main(String[] args) {
-        Scanner input = new Scanner(System.in);
-        System.out.println("Привет, список доступных команд - /help");
+    public static void main(String[] args) throws TelegramApiException {
 
-        while (true) {
-            String command = input.nextLine();
-            setCommand(command.toLowerCase());
-        }
-    }
-
-    public static void setCommand(String command) {
-        switch (command) {
-            case "/help" -> System.out.println(
-                    "Бот для парсинга статистики с YouTube и VK \nДоступные команды: \n/YouTube \n/vk \n/exit");
-            case "/youtube" -> System.out.println("Отправьте ссылку на видео YouTube");
-            case "/vk" -> System.out.println("Отправьте ссылку на пост VK");
-            case "/exit" -> {
-                System.exit(0);
-            }
-            default -> System.out.println("Список доступных команд - /help");
+        try {
+            TelegramBotsApi botsApi = new TelegramBotsApi(DefaultBotSession.class);
+            botsApi.registerBot(new MainHandler());
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
         }
     }
 }
